@@ -13,3 +13,4 @@ pip3 install sexpdata
 python3 -m blink ./examples/blink.l
 ```
 
+You can get `blink.v` and `tb_blink.v`.
