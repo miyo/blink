@@ -1,0 +1,11 @@
+rm -f *.v
+rm -f *.vcd
+rm -f *.qpf
+rm -f *.qsf
+rm -f *.qws
+rm -f *.sdc
+rm -f a.out
+rm -f c5_pin_model_dump.txt
+rm -rf incremental_db
+rm -rf output_files
+rm -rf db
