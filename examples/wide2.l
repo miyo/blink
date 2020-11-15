@@ -1,0 +1,16 @@
+(L 4294967296 :out '(Q 29 20)
+   :synth-tool "QUARTUS"
+   :device "5CEBA4F23C7"
+   :iomap '(CLOCK (M9 "3.3-V LVTTL") RESET (U13 "3.3-V LVTTL")
+	    Q ((AA2 "3.3-V LVTTL")
+	       (AA1 "3.3-V LVTTL")
+	       (W2 "3.3-V LVTTL")
+	       (Y3 "3.3-V LVTTL")
+	       (N2 "3.3-V LVTTL")
+	       (N1 "3.3-V LVTTL")
+	       (U2 "3.3-V LVTTL")
+	       (U1 "3.3-V LVTTL")
+	       (L2 "3.3-V LVTTL")
+	       (L1 "3.3-V LVTTL")))
+   :period '(CLOCK 20.0)
+   )

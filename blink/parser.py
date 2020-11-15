@@ -9,13 +9,24 @@ def parse_iomap(lst):
         raise errors.BlinkParsingError
     ret = []
     for i in range(len(v)//2):
-        iomap = data.IOMAP(v[2*i].value())
         if type(v[2*i+1]) is sexpdata.Symbol:
+            iomap = data.IOMAP(v[2*i].value())
             iomap.pin = v[2*i+1].value()
+            ret.append(iomap)
         else:
-            iomap.pin = v[2*i+1][0].value()
-            iomap.iostd = v[2*i+1][1]
-        ret.append(iomap)
+            if type(v[2*i+1][0]) is sexpdata.Symbol:
+                iomap = data.IOMAP(v[2*i].value())
+                iomap.pin = v[2*i+1][0].value()
+                iomap.iostd = v[2*i+1][1]
+                ret.append(iomap)
+            elif type(v[2*i+1][0]) is list:
+                for j,x in enumerate(v[2*i+1]):
+                    iomap = data.IOMAP("{}[{}]".format(v[2*i].value(), j))
+                    iomap.pin = x[0].value()
+                    iomap.iostd = x[1]
+                    ret.append(iomap)
+            else:
+                raise errors.BlinkParsingError
     return ret
 
 def parse_port(a):

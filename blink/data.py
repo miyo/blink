@@ -4,6 +4,7 @@ class Module:
         self.synth_tool = None
         self.device = "5CEBA4F23C7"
         self.port = []
+        self.period = {}
 
     def __repr__(self):
         h = {'synth_tool':self.synth_tool,
@@ -74,12 +75,11 @@ class IOMAP:
 
 class Counter(Module):
 
-    def __init__(self, value, init=0, at=None, period=None, out=Port('Q')):
+    def __init__(self, value, init=0, at=None, out=Port('Q')):
         super().__init__()
         self.value = value
         self.init = init
         self.at = at
-        self.period = period
         self.out = out
 
     def __repr__(self):
