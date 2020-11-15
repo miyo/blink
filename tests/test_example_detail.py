@@ -62,8 +62,9 @@ endmodule // detail
     repeat(10000) @(posedge clk);
     $finish;
   end
+  wire Q_w;
   bl_detail detail_inst(
-    .CLOCK(clk),.RESET(reset)
+    .CLOCK(clk),.RESET(reset),.Q(Q_w)
   );
 endmodule
 '''

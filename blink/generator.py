@@ -53,6 +53,12 @@ def generate_children_receivers(dest, children_info, expr):
         print('    end', file=dest)
         print('  end', file=dest)
 
+def gen_wire(port):
+    if port.vector == False:
+        return "wire {}".format(port.name)
+    else:
+        return "wire [{}-1:0] {}".format(port.width, port.name)
+
 def generate_counter_module(dest, expr, name):
     value = expr.value-1 # 0-origin
     
@@ -71,15 +77,18 @@ def generate_counter_module(dest, expr, name):
 
     generate_throghout_ports(dest, children_info)
         
-    print('  output wire {}'.format(outport.name), file=dest)
+    print('  output {}'.format(gen_wire(outport)), file=dest)
     print(');', file=dest)
-    print("  reg flag = {};".format(initvalue), file=dest)
-    print('  assign {} = flag;'.format(outport.name), file=dest)
+    if(outport.vector == False):
+        print("  reg flag = {};".format(initvalue), file=dest)
+        print('  assign {} = flag;'.format(outport.name), file=dest)
 
     generate_children_receivers(dest, children_info, expr)
     
     if value >= 0:
         print('  reg [{}-1:0] counter;'.format(bitwidth), file=dest)
+        if(outport.vector):
+            print('  assign {} = counter[{}:{}];'.format(outport.name, outport.upper, outport.lower), file=dest)
         
         # ALWAYS BLOCK
         print('  always @(posedge CLOCK) begin', file=dest)
@@ -87,7 +96,8 @@ def generate_counter_module(dest, expr, name):
         # RESET
         print('    if(RESET == 1) begin', file=dest)
         print("      counter <= {}'d0;".format(bitwidth), file=dest)
-        print('      flag <= {};'.format(initvalue), file=dest)
+        if(outport.vector == False):
+            print('      flag <= {};'.format(initvalue), file=dest)
 
         # BODY
         print('    end else begin', file=dest)
@@ -99,7 +109,8 @@ def generate_counter_module(dest, expr, name):
         print("        {}counter <= counter + {}'d1;".format(indent, bitwidth), file=dest)
         print('      {}end else begin'.format(indent), file=dest)
         print('        {}counter <= 0;'.format(indent), file=dest)
-        print('        {}flag <= ~flag;'.format(indent), file=dest)
+        if(outport.vector == False):
+            print('        {}flag <= ~flag;'.format(indent), file=dest)
         print('      {}end'.format(indent), file=dest)
         if has_condition(expr):
             print('      end', file=dest)
@@ -154,11 +165,18 @@ def generate_testbench_module(dest, expr, name, info):
     connections = [".CLOCK(clk)", ".RESET(reset)"]
     for c in info.get('outport', []):
         if(c.global_port):
-            print("  wire {}_w;".format(c.name), file=dest)
+            if c.vector:
+                print("  wire [{}-1:0] {}_w;".format(c.width, c.name), file=dest)
+            else:
+                print("  wire {}_w;".format(c.name), file=dest)
             connections.append(".{0}({0}_w)".format(c.name))
-    if has_condition(expr) and info.get('outport', [])[-1].global_port == False:
-        print("  wire {}_w;".format(info.get('outport', [])[-1].name), file=dest)
-        connections.append(".{0}({0}_w)".format(info.get('outport', [])[-1].name))
+    if info.get('outport', [])[-1].global_port == False:
+        c = info.get('outport', [])[-1]
+        if c.vector:
+            print("  wire [{}-1:0] {}_w;".format(c.width, c.name), file=dest)
+        else:
+            print("  wire {}_w;".format(c.name), file=dest)
+        connections.append(".{0}({0}_w)".format(c.name))
     print('  bl_{0} {0}_inst('.format(name), file=dest)
     print('    {}'.format(",".join(connections)), file=dest)
     print('  );', file=dest)

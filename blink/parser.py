@@ -3,7 +3,7 @@ import sexpdata
 from . import errors
 from . import data
 
-def parse_port(lst):
+def parse_iomap(lst):
     v = lst.value()
     if(len(v) % 2 == 1):
         raise errors.BlinkParsingError
@@ -17,6 +17,18 @@ def parse_port(lst):
             iomap.iostd = v[2*i+1][1]
         ret.append(iomap)
     return ret
+
+def parse_port(a):
+    if type(a) is sexpdata.Symbol:
+        return data.Port(a.value(), global_port=True)
+    elif type(a) is sexpdata.Quoted:
+        v = a.value()
+        if(len(v) == 3 and type(v[1]) is int and type(v[2]) is int):
+            return data.Port(v[0].value(), global_port=True, vector=True, upper=v[1], lower=v[2])
+        else:
+            raise errors.BlinkParsingError
+    else:
+        raise errors.BlinkParsingError
 
 def parse_period(lst):
     v = lst.value()
@@ -46,16 +58,17 @@ def parse_L(lst):
             ret.at = parse_list(lst[1])
             lst = lst[2:]
         elif (lst[0] == sexpdata.Symbol(':iomap') and len(lst) >= 2):
-            ret.port = parse_port(lst[1])
+            ret.port = parse_iomap(lst[1])
             lst = lst[2:]
         elif (lst[0] == sexpdata.Symbol(':period') and len(lst) >= 2):
             ret.period = parse_period(lst[1])
             lst = lst[2:]
         elif (lst[0] == sexpdata.Symbol(':out') and len(lst) >= 2):
-            if type(lst[1]) is sexpdata.Symbol:
-                ret.out = data.Port(lst[1].value(), global_port=True)
-            elif type(lst[1]) is sexpdata.Quoted:
-                ret.out = data.Port(lst[1].value(), global_port=True)
+            #if type(lst[1]) is sexpdata.Symbol:
+            #    ret.out = data.Port(lst[1].value(), global_port=True)
+            #elif type(lst[1]) is sexpdata.Quoted:
+            #    ret.out = data.Port(lst[1].value(), global_port=True)
+            ret.out = parse_port(lst[1])
             lst = lst[2:]
         else:
             lst = lst[1:]

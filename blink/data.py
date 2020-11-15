@@ -27,6 +27,7 @@ class Port:
         self.vector = vector
         self.upper = upper
         self.lower = lower
+        self.width = upper - lower + 1
 
     def __repr__(self):
         info = {'name':self.name,
@@ -34,6 +35,7 @@ class Port:
                 'vector':self.vector,
                 'uppser':self.upper,
                 'lower':self.lower,
+                'width':self.width,
         }
         return "Port({})".format(info)
 
@@ -44,7 +46,8 @@ class Port:
                 self.global_port == other.global_port and
                 self.vector == other.vector and
                 self.upper == other.upper and
-                self.lower == other.lower)
+                self.lower == other.lower and
+                self.width == other.width)
 
 
 class IOMAP:

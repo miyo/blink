@@ -53,3 +53,11 @@ def test_gen_bitwidth():
     assert(generator.gen_bitwidth(64) == 7)
     assert(generator.gen_bitwidth(127) == 7)
     assert(generator.gen_bitwidth(128) == 8)
+
+
+def test_gen_wire():
+    s = generator.gen_wire(data.Port('Q'))
+    assert(s == 'wire Q')
+    
+    s = generator.gen_wire(data.Port('Q', vector=True, upper=7, lower=3))
+    assert(s == 'wire [5-1:0] Q')
