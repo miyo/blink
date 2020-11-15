@@ -45,7 +45,7 @@ def parse_L(lst):
         elif (lst[0] == sexpdata.Symbol(':at') and len(lst) >= 2):
             ret.at = parse_list(lst[1])
             lst = lst[2:]
-        elif (lst[0] == sexpdata.Symbol(':port') and len(lst) >= 2):
+        elif (lst[0] == sexpdata.Symbol(':iomap') and len(lst) >= 2):
             ret.port = parse_port(lst[1])
             lst = lst[2:]
         elif (lst[0] == sexpdata.Symbol(':period') and len(lst) >= 2):
