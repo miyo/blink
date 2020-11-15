@@ -553,3 +553,64 @@ create_clock -name {CLOCK} -period {20.000} -waveform {0.000 10.000}
     ss = io.StringIO()
     generator.generate_quartus_sdc(ss, expr)
     assert(expected_sdc == ss.getvalue())
+
+def test_example_nest4():
+    name = 'nest4'
+    src = '''(L 0 :at (L 2))'''
+    expr = parser.parse_source(src)
+    ss = io.StringIO()
+    info = generator.generate_counter_module(ss, expr, name)
+    
+    expected_verilog='''module bl_nest4_c
+(
+  input wire CLOCK,
+  input wire RESET,
+  output wire Q
+);
+  reg flag = 0;
+  assign Q = flag;
+  reg [1-1:0] counter;
+  always @(posedge CLOCK) begin
+    if(RESET == 1) begin
+      counter <= 1'd0;
+      flag <= 0;
+    end else begin
+      if(counter < 1'd1) begin
+        counter <= counter + 1'd1;
+      end else begin
+        counter <= 0;
+        flag <= ~flag;
+      end
+    end
+  end
+endmodule // nest4_c
+module bl_nest4
+(
+  input wire CLOCK,
+  input wire RESET,
+  output wire Q
+);
+  reg flag = 0;
+  assign Q = flag;
+  wire Q_w;
+  reg Q_d = 0;
+  always @(posedge CLOCK) begin
+    if(RESET == 1) begin
+      Q_d <= 0;
+    end else begin
+      Q_d <= Q_w;
+    end
+  end
+  always @(posedge CLOCK) begin
+    if(RESET == 1) begin
+      flag <= 0;
+    end else begin
+      flag <= Q_w;
+    end
+  end
+  bl_nest4_c nest4_c_inst(
+    .CLOCK(CLOCK),.RESET(RESET),.Q(Q_w)
+  );
+endmodule // nest4
+'''
+    assert(expected_verilog == ss.getvalue())
