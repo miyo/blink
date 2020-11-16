@@ -6,7 +6,7 @@
 - pytest
 
 ```
-pipenv shell
+pipenv install
 ```
 
 or
