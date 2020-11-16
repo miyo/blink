@@ -2,8 +2,17 @@
 
 ## Requirements
 
+- sexpdata
+- pytest
+
 ```
-pip3 install sexpdata
+pipenv shell
+```
+
+or
+
+```
+pip3 install sexpdata pytest
 ```
 
 

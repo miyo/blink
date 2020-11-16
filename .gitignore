@@ -11,3 +11,4 @@ db
 output_files
 a.out
 c5_pin_model_dump.txt
+.venv
