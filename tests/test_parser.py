@@ -9,7 +9,7 @@ def test_parse_L():
 
 def test_parse_L():
     l = parser.parse_source("(L 1024 :out '(Q 7 3))")
-    assert(l == data.Counter(1024, out=data.Port('Q', global_port=True, vector=True, upper=7, lower=3)))
+    assert(l == data.Counter(1024, port=data.Port('Q', global_port=True, vector=True, upper=7, lower=3)))
 
 def test_parse_iomap():
     l = parser.parse_iomap(sexpdata.loads("'(CLOCK M9)"))

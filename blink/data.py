@@ -3,13 +3,13 @@ class Module:
     def __init__(self):
         self.synth_tool = None
         self.device = "5CEBA4F23C7"
-        self.port = []
+        self.iomap = []
         self.period = {}
 
     def __repr__(self):
         h = {'synth_tool':self.synth_tool,
              'device':self.device,
-             'port':self.port,
+             'iomap':self.iomap,
              }
         return str(h)
     
@@ -18,7 +18,7 @@ class Module:
             return False
         return (self.synth_tool == other.synth_tool and
                 self.device == other.device and
-                self.port == other.port)
+                self.iomap == other.iomap)
 
 class Port:
     
@@ -75,19 +75,19 @@ class IOMAP:
 
 class Counter(Module):
 
-    def __init__(self, value, init=0, at=None, out=Port('Q')):
+    def __init__(self, value, init=0, at=None, port=Port('Q')):
         super().__init__()
         self.value = value
         self.init = init
         self.at = at
-        self.out = out
+        self.port = port
 
     def __repr__(self):
         info = {'value':self.value,
                 'init':self.init,
                 'at':self.at,
                 'period':self.period,
-                'out':self.out,
+                'port':self.port,
         }
         s = "Counter({}".format(info)
         if self.synth_tool is not None:
@@ -105,4 +105,28 @@ class Counter(Module):
                 self.init == other.init and
                 self.at == other.at and
                 self.period == other.period and
-                self.out == other.out)
+                self.port == other.port)
+
+
+class InputSwitch(Module):
+
+    def __init__(self, port=Port('S')):
+        super().__init__()
+        self.port = port
+
+    def __repr__(self):
+        info = {'port':self.port,
+        }
+        s = "Switch({}".format(info)
+        if self.synth_tool is not None:
+            s += super().__repr__()
+        s += ")"
+        return s
+
+    
+    def __eq__(self, other):
+        if super().__eq__(other) == False:
+            return False
+        if not isinstance(other, Counter):
+            return False
+        return (self.port == other.port)

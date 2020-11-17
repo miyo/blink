@@ -8,7 +8,7 @@ def has_condition(expr):
 
 
 def has_specified_output_port(expr):
-    return expr.out.global_port
+    return expr.port.global_port
 
 
 def gen_nested_module_name(n):
@@ -64,7 +64,7 @@ def generate_counter_module(dest, expr, name):
     
     bitwidth = gen_bitwidth(value)
     initvalue = expr.init
-    outport = expr.out
+    outport = expr.port
     
     children_info = {}
     if has_condition(expr):
@@ -195,7 +195,7 @@ def generate_quartus_qsf(dest, expr, name):
     print("set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files", file=dest)
     print("set_global_assignment -name TOP_LEVEL_ENTITY bl_{}".format(name), file=dest)
     print('set_global_assignment -name VERILOG_FILE {}.v'.format(name), file=dest)
-    for p in expr.port:
+    for p in expr.iomap:
         print("set_location_assignment PIN_{} -to {}".format(p.pin, p.name), file=dest)
         if p.iostd is not None:
             print('set_instance_assignment -name IO_STANDARD "{}" -to {}'.format(p.iostd, p.name), file=dest)

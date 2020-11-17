@@ -69,17 +69,13 @@ def parse_L(lst):
             ret.at = parse_list(lst[1])
             lst = lst[2:]
         elif (lst[0] == sexpdata.Symbol(':iomap') and len(lst) >= 2):
-            ret.port = parse_iomap(lst[1])
+            ret.iomap = parse_iomap(lst[1])
             lst = lst[2:]
         elif (lst[0] == sexpdata.Symbol(':period') and len(lst) >= 2):
             ret.period = parse_period(lst[1])
             lst = lst[2:]
         elif (lst[0] == sexpdata.Symbol(':out') and len(lst) >= 2):
-            #if type(lst[1]) is sexpdata.Symbol:
-            #    ret.out = data.Port(lst[1].value(), global_port=True)
-            #elif type(lst[1]) is sexpdata.Quoted:
-            #    ret.out = data.Port(lst[1].value(), global_port=True)
-            ret.out = parse_port(lst[1])
+            ret.port = parse_port(lst[1])
             lst = lst[2:]
         else:
             lst = lst[1:]
