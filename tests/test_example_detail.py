@@ -59,7 +59,7 @@ endmodule // detail
     reset = 1;
     repeat(10) @(posedge clk);
     reset <= 0;
-    repeat(10000) @(posedge clk);
+    repeat(400000000) @(posedge clk);
     $finish;
   end
   wire Q_w;

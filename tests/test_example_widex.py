@@ -49,7 +49,7 @@ endmodule // wide
     reset = 1;
     repeat(10) @(posedge clk);
     reset <= 0;
-    repeat(10000) @(posedge clk);
+    repeat(8192) @(posedge clk);
     $finish;
   end
   wire [5-1:0] Q_w;
@@ -124,7 +124,7 @@ endmodule // wide2
     reset = 1;
     repeat(10) @(posedge clk);
     reset <= 0;
-    repeat(10000) @(posedge clk);
+    repeat(34359738368) @(posedge clk);
     $finish;
   end
   wire [10-1:0] Q_w;

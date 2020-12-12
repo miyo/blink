@@ -505,7 +505,7 @@ endmodule // nest3
     reset = 1;
     repeat(10) @(posedge clk);
     reset <= 0;
-    repeat(10000) @(posedge clk);
+    repeat(8) @(posedge clk);
     $finish;
   end
   wire Q0_w;

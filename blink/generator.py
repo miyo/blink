@@ -158,7 +158,10 @@ def generate_testbench_module(dest, expr, name, info):
     print('    reset = 1;', file=dest)
     print('    repeat(10) @(posedge clk);', file=dest)
     print('    reset <= 0;', file=dest)
-    print('    repeat(10000) @(posedge clk);', file=dest)
+    if isinstance(expr, data.Counter):
+        print('    repeat({}) @(posedge clk);'.format(int(expr.value)*8), file=dest)
+    else:
+        print('    repeat(100000) @(posedge clk);', file=dest)
     print('    $finish;', file=dest)
     print('  end', file=dest)
     

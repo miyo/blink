@@ -75,12 +75,12 @@ class IOMAP:
 
 class Counter(Module):
 
-    def __init__(self, value, init=0, at=None, port=Port('Q')):
+    def __init__(self, value, init=0, port=Port('Q'), at=None):
         super().__init__()
         self.value = value
         self.init = init
-        self.at = at
         self.port = port
+        self.at = at
 
     def __repr__(self):
         info = {'value':self.value,

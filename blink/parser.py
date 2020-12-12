@@ -98,7 +98,7 @@ def parse_source(s):
     s = s.strip()
     ret = None
     if s == 'L':
-        ret = data.Counter(12500000)
+        ret = data.Counter(1250000)
         ret.synth_tool = "QUARTUS"
         ret.device = "5CEBA4F23C7"
         ret.iomap = [data.IOMAP("CLOCK", pin="M9"),
