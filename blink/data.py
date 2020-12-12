@@ -130,3 +130,29 @@ class InputSwitch(Module):
         if not isinstance(other, Counter):
             return False
         return (self.port == other.port)
+
+class MapValue(Module):
+
+    def __init__(self, value, port=Port('M')):
+        super().__init__()
+        self.value = value
+        self.table = {}
+
+    def __repr__(self):
+        info = {'value':self.value,
+                'table':self.table,
+        }
+        s = "Map({}".format(info)
+        if self.synth_tool is not None:
+            s += super().__repr__()
+        s += ")"
+        return s
+
+    
+    def __eq__(self, other):
+        if super().__eq__(other) == False:
+            return False
+        if not isinstance(other, MapValue):
+            return False
+        return (self.value == other.value and self.table == other.table)
+    

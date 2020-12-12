@@ -81,9 +81,26 @@ def parse_L(lst):
             lst = lst[1:]
     return ret
 
+def parse_M(lst):
+    if(lst[0] != sexpdata.Symbol('M') or len(lst) < 2):
+        raise errors.BlinkParsingError
+    ret = data.MapValue(lst[1])
+    lst = lst[2:]
+    while(len(lst) > 0):
+        if(lst[0] == sexpdata.Symbol(':table') and len(lst) >= 2):
+            ret.table = lst[1]
+            lst = lst[2:]
+        else:
+            # skip
+            lst = lst[1:]
+    return ret
+
 def parse_list(lst):
     if(lst[0] == sexpdata.Symbol('L')):
         ret = parse_L(lst)
+        return ret
+    elif(lst[0] == sexpdata.Symbol('M')):
+        ret = parse_M(lst)
         return ret
     else:
         raise errors.BlinkParsingError
