@@ -13,5 +13,8 @@ def parse_file(file):
 
 
 if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("usage: {} sources".format(sys.argv[0]))
+        exit()
     for arg in sys.argv[1:]:
         parse_file(arg)

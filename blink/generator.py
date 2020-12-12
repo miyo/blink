@@ -214,7 +214,7 @@ def generate_quartus_sdc(dest, expr):
         v = float(p[1])
         v0 = '{:.3f}'.format(v)
         v1 = '{:.3f}'.format(v/2)
-        print("create_clock -name {"+s+"}", "-period {"+v0+"} -waveform {0.000 "+v1+"}", file=dest)
+        print("create_clock -name clk_"+s, "-period {"+v0+"} -waveform {0.000 "+v1+"}", "[get_ports {"+s+"}]", file=dest)
 
 
 def generate(name, expr):

@@ -96,6 +96,16 @@ def parse_sexp(s):
 
 def parse_source(s):
     s = s.strip()
-    ret = data.Counter(64) if s == 'L' else parse_sexp(s)
-    print(ret)
+    ret = None
+    if s == 'L':
+        ret = data.Counter(12500000)
+        ret.synth_tool = "QUARTUS"
+        ret.device = "5CEBA4F23C7"
+        ret.iomap = [data.IOMAP("CLOCK", pin="M9"),
+                      data.IOMAP("RESET", pin="U13"),
+                      data.IOMAP("Q", pin="L1")]
+        ret.period = {"CLOCK": "20.0"}
+    else:
+        ret = parse_sexp(s)
+        print(ret)
     return ret

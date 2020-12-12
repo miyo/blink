@@ -548,7 +548,7 @@ set_global_assignment -name SDC_FILE nest3.sdc
     assert(expected_qpf == ss.getvalue())
 
     expected_sdc = '''set_time_format -unit ns -decimal_places 3
-create_clock -name {CLOCK} -period {20.000} -waveform {0.000 10.000}
+create_clock -name clk_CLOCK -period {20.000} -waveform {0.000 10.000} [get_ports {CLOCK}]
 '''
     ss = io.StringIO()
     generator.generate_quartus_sdc(ss, expr)
